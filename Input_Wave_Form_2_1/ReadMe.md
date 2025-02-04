@@ -25,6 +25,11 @@ This is the main module that generates waveforms for the signals `a` and `b`.
 - After 1 more time unit, `a = 0`, `b = 0`.
 - Finally, after 5 time units, `a = 0`, `b = 0`.
 
+
+![WhatsApp Image 2025-02-03 at 17 12 15_ad8bab18](https://github.com/user-attachments/assets/c5a14fe1-624d-42b2-b83e-21ff11ad7c03)
+
+  
+
 This sequence creates a simple, timed waveform for two signals (`a` and `b`) to test how a circuit behaves under different conditions.
 
 ## Usage
