@@ -59,7 +59,7 @@ endmodule
 module testbench;
     logic [3:0] s;        // Sum result
     logic cOut;           // Carry output
-    logic [8:0] count;    // Counter to generate test cases
+    logic [9:0] count;    // Counter to generate test cases
 
     // Instantiate the BCD adder module
     bcdAdd add0 (
@@ -71,7 +71,7 @@ module testbench;
     );
 
     initial begin
-        for (count = 0; count <= 255; count++) begin
+        for (count = 0; count < 512; count++) begin
             #1;  // Small delay for simulation
 
             // Check if the result is correct by comparing the sum and carry
