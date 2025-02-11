@@ -1,44 +1,13 @@
-<div id="top"></div>
-<!--
-*** Thanks for checking out the Change Box - Coin Return System project! If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/your_username/Change-Box-Coin-Return-System">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
   <h3 align="center">Change Box - Coin Return System</h3>
 
   <p align="center">
     A system that simulates a change box to return coins as change for purchased items.
     <br />
-    <a href="https://github.com/your_username/Change-Box-Coin-Return-System"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/your_username/Change-Box-Coin-Return-System">View Demo</a>
-    ·
-    <a href="https://github.com/your_username/Change-Box-Coin-Return-System/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/your_username/Change-Box-Coin-Return-System/issues">Request Feature</a>
   </p>
 </div>
 
@@ -48,23 +17,12 @@
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#inputs">Inputs</a></li>
-        <li><a href="#outputs">Outputs</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#inputs">Inputs</a></li>
+    <li><a href="#outputs">Outputs</a></li>
+    <li><a href="#example-workflow">Example Workflow</a></li>
     <li><a href="#error-handling">Error Handling</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#usage">Usage</a></li>
   </ol>
 </details>
 
@@ -73,7 +31,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project simulates a change box that returns coins as change for a purchased item. The system checks if the customer has provided enough money and determines the coins to return as change.
+The Change Box - Coin Return System simulates a change box that returns coins as change for a purchased item. The system checks if the customer has provided enough money and determines the coins to return as change.
 
 ### Inputs:
 1. **Cost [3:0]**: Four-bit input representing the cost of the item in increments of $0.05. The maximum value is 75 cents.
@@ -95,19 +53,46 @@ This project simulates a change box that returns coins as change for a purchased
 6. **Remaining [3:0]**: The remaining amount, in nickels, that still needs to be returned to the customer if change is owed.
 
 ### Description:
-The module takes inputs of the item's cost and the amount paid, and checks if enough change is available in the change box. If enough change is available, it will return the two largest coins that can be given as change. If not enough money is paid, the system will request the customer to cough up more money. The system will also assert an error if there is not enough change available in the box.
+- The module takes inputs of the item's cost and the amount paid, and checks if enough change is available in the change box.
+- If enough change is available, it will return the two largest coins that can be given as change.
+- If not enough money is paid, the system will request the customer to cough up more money.
+- The system will also assert an error if there is not enough change available in the box.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-<!-- GETTING STARTED -->
-## Getting Started
+<!-- EXAMPLE WORKFLOW -->
+## Example Workflow:
 
-This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
+1. The customer buys an item costing 30 cents.
+2. They pay with 50 cents.
+3. The system checks the change box for available coins.
+4. The system returns 1 quarter (25 cents) and 1 nickel (5 cents) as change.
 
-### Installation
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/your_username/Change-Box-Coin-Return-System.git
+
+
+<!-- ERROR HANDLING -->
+## Error Handling:
+
+- The system will assert an error if invalid input values are provided or if not enough change is available in the box.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- USAGE -->
+## Usage:
+
+To simulate the change box, instantiate the `ChangeBox` module and provide the inputs for `Cost`, `Paid`, and the available coins (`Quarters`, `Dimes`, `Nickels`). Observe the outputs `FirstCoin`, `SecondCoin`, `NotEnoughChange`, `ExactAmmount`, `CoughUpMore`, and `Remaining`.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[linkedin-url]: https://linkedin.com/in/MartinaVerardi
