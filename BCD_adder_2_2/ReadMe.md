@@ -1,9 +1,35 @@
-# BCD Adder
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+
+  <h3 align="center">BCD Adder</h3>
+
+  <p align="center">
+    A SystemVerilog implementation of a Binary-Coded Decimal (BCD) Adder, which adds two 4-bit BCD numbers with a carry-in.
+    <br />
+  </p>
+</div>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#usage">Usage</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
 
 This repository contains a **SystemVerilog** implementation of a **Binary-Coded Decimal (BCD) Adder**. The BCD adder calculates the sum of two 4-bit BCD numbers and a carry-in, producing a 4-bit sum and a carry-out that indicates any overflow to the next higher BCD digit.
 
-## Overview
-
+### Overview:
 The BCD adder module adds two 4-bit BCD numbers and a carry-in value, performing the addition with handling for BCD-specific overflow. If the sum exceeds 9 (1001 in binary), the result is adjusted by adding 6 (0110) to make it a valid BCD value.
 
 The adder is composed of:
@@ -12,6 +38,11 @@ The adder is composed of:
 
 The project also includes a **testbench** to demonstrate the functionality and correctness of the BCD adder.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- MODULES -->
 ## Modules
 
 ### `bcdAdd`
@@ -48,6 +79,11 @@ The testbench module generates test cases and checks if the output sum and carry
 - Loops through all possible combinations of the 8-bit inputs.
 - Compares the result to the expected sum and carry, displaying any discrepancies.
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+<!-- USAGE -->
 ## Usage
 
 1. Clone the repository to your local machine.
