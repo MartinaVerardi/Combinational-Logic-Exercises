@@ -57,27 +57,21 @@ Each of the inputs and outputs are described below:
 */
 
 module CheckIfCoinPresent(
-    input int coin,
+    input logic [3:0] coin,
     input logic [1:0] Quarters, // 15 cents
     input logic [1:0] Dimes, // 10 cents
     input logic [1:0] Nickels, // 5 cents
-
-    output logic present
-)
-
-present = 0;
-
-always_comb begin
-
-    unque case(coin)
-        15: if (Quarters) present = 1;
-        10: if (Dimes) present = 1;
-        5: if (Nickels) present = 1;
-    endcase
-
-end
-
-
+    output logic coinPresent
+);
+    // Check if the requested coin value is available in the change box
+    always_comb begin
+        coinPresent = 0;
+        unique case(coin)
+            4'd15: if (Quarters > 0) coinPresent = 1;
+            4'd10: if (Dimes > 0) coinPresent = 1;
+            4'd5: if (Nickels > 0) coinPresent = 1;
+        endcase
+    end
 endmodule
 
 module CountChange(
@@ -86,87 +80,59 @@ module CountChange(
     input logic [1:0] Quarters, // 15 cents
     input logic [1:0] Dimes, // 10 cents
     input logic [1:0] Nickels, // 5 cents
-
     output logic NotEnoughChange,
     output logic [2:0] FirstCoin,
-    output logic [3:0] Remaining,
-    output logic [2:0] SecondCoin
+    output logic [2:0] SecondCoin,
+    output logic [3:0] Remaining
 );
+    always_comb begin
+        NotEnoughChange = 0;
+        FirstCoin = 3'b000;
+        SecondCoin = 3'b000;
+        Remaining = Paid - Cost;
 
-NotEnoughChange = 0;
-logic [3:0] temp;
-coinCheck = 0;
-
-always_comb begin
-
-    temp = Paid - Cost;
-
-    if (temp > 30) begin
-
-        coinCheck = CheckIfCoinPresent(15);
-        coinCheck = CheckIfCoinPresent(15);
-
-        if (coinCheck) begin
-
-            FirstCoin = 3'b101; 
-            SecondCoin = 3'b101; 
-            NotEnoughChange = 1;
-            Remaining = temp - 30;
-            $display("Remaining Change: %d", Remaining);
-
-        end else begin
-
-            Remaining = temp;
-            $display("Remaining Change: %d", Remaining);
-
+        // Determine the largest possible coin to return first
+        if (Remaining > 0) begin
+            if (Remaining >= 15 && Quarters > 0) begin
+                FirstCoin = 3'b101;
+                Remaining -= 15;
+                if (Remaining >= 15 && Quarters > 1) begin
+                    SecondCoin = 3'b101;
+                    Remaining -= 15;
+                end
+            end
+            if (Remaining >= 10 && Dimes > 0) begin
+                if (FirstCoin == 3'b000)
+                    FirstCoin = 3'b010;
+                else
+                    SecondCoin = 3'b010;
+                Remaining -= 10;
+            end
+            if (Remaining >= 5 && Nickels > 0) begin
+                if (FirstCoin == 3'b000)
+                    FirstCoin = 3'b001;
+                else
+                    SecondCoin = 3'b001;
+                Remaining -= 5;
+            end
+            // If we still owe money, set NotEnoughChange flag
+            if (Remaining > 0)
+                NotEnoughChange = 1;
         end
-        
     end
-    else if (30 => temp >= 15) begin
-
-        coinCheck = CheckIfCoinPresent(15);
-
-        if(coinCheck) begin
-
-            FirstCoin = 3'b101;
-
-            if ()
-
-        end
-
-        
-    end
-    else if (15 > temp >= 10) begin
-        FirstCoin = 3'b010;
-    end
-    else if (10 > temp >= 5) begin
-        FirstCoin = 3'b001;
-    end
-    
-
-end
-
-
 endmodule
 
 module CostVsPaid(
-    input logic [3:0] cost,
-    input logic [3:0] paid,
-
+    input logic [3:0] Cost,
+    input logic [3:0] Paid,
     output logic ExactAmmount,
     output logic CoughUpMore
 );
-
-ExactAmmount = 0;
-CoughUpMore = 0;
-
-always_comb begin
-
-    if(cost == paid) ExactAmmount = 1;
-    else if (cost > paid) CoughUpMore = 1;
-
-end
-
+    // Determine if exact amount was paid or if more money is needed
+    always_comb begin
+        ExactAmmount = (Cost == Paid);
+        CoughUpMore = (Cost > Paid);
+    end
 endmodule
 
 module ChangeBox(
@@ -175,37 +141,39 @@ module ChangeBox(
     input logic [1:0] Quarters,
     input logic [1:0] Dimes,
     input logic [1:0] Nickels,
-
     output logic [2:0] FirstCoin,
     output logic [2:0] SecondCoin,
     output logic NotEnoughChange,
     output logic ExactAmmount,
     output logic CoughUpMore,
-    output logic Remaining
+    output logic [3:0] Remaining
 );
+    always_comb begin
+        // Validate inputs
+        if (Cost > 15 || Paid > 15 || Quarters > 3 || Dimes > 3 || Nickels > 3) begin
+            $fatal("ERROR!! Invalid input values.");
+        end
 
+        // Check if exact amount was paid or more money is required
+        CostVsPaid compare(.Cost(Cost), .Paid(Paid), .ExactAmmount(ExactAmmount), .CoughUpMore(CoughUpMore));
 
-
-always_comb begin
-
-    if(!(Cost > 15))
-        $fatal("ERROR!! Cost should be under 75 cents. Given: %0d", Cost);
-    if(!(Paid > 15))
-        $fatal("ERROR!! Paid should be under 75 cents. Given: %0d", Paid);
-    if(!(Quarters > 3))
-        $fatal("ERROR!! There is a max of 4 Quarters in the Change Box. Given: %0d", Quarters);
-    if(!(Dimes > 3))
-        $fatal("ERROR!! There is a max of 4 Dimes in the Change Box. Given: %0d", Dimes);
-    if(!(Nickels > 3))
-        $fatal("ERROR!! There is a max of 4 Nickels in the Change Box. Given: %0d", Nickels);
-
-    {ExactAmmount, CoughUpMore} = CostVsPaid(Cost, Paid);
-
-    if (ExactAmmount) $finish;
-    if (CoughUpMore) $display("ERROR!! Not enough money."); $finish;
-
-    {FirstCoin, SecondCoin} = CountChange(Quarters, Dimes, Nickels, Cost, Paid);
-
-end
-
+        // If exact amount was paid, no change is needed
+        if (ExactAmmount) begin
+            FirstCoin = 3'b000;
+            SecondCoin = 3'b000;
+            NotEnoughChange = 0;
+            Remaining = 0;
+        end else if (CoughUpMore) begin
+            // If not enough money was paid, display error and exit
+            FirstCoin = 3'b000;
+            SecondCoin = 3'b000;
+            NotEnoughChange = 0;
+            Remaining = 0;
+            $display("ERROR!! Not enough money.");
+        end else begin
+            // Calculate change
+            CountChange compute(.Cost(Cost), .Paid(Paid), .Quarters(Quarters), .Dimes(Dimes), .Nickels(Nickels),
+                               .NotEnoughChange(NotEnoughChange), .FirstCoin(FirstCoin), .SecondCoin(SecondCoin), .Remaining(Remaining));
+        end
+    end
 endmodule
